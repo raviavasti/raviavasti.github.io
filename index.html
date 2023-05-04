@@ -1,7 +1,26 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+  <head>
+    <style>
+      .square {
+        width: 100px;
+        height: 100px;
+        background-color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="square" id="square"></div>
+    <script>
+      var square = document.getElementById("square");
+      var now = new Date().getHours();
+      if (now >= 6 && now < 12) {
+        square.style.backgroundColor = "#FFA500"; // orange for morning
+      } else if (now >= 12 && now < 18) {
+        square.style.backgroundColor = "#FFFF00"; // yellow for afternoon
+      } else {
+        square.style.backgroundColor = "#008000"; // green for evening/night
+      }
+    </script>
+  </body>
 </html>
