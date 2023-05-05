@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>The Current Time Displayed as the Value of Light From a Seven Segment Display</title>
-	<style>
-		body {
-			background-color: black;
+  <head>
+    <title>Color Clock</title>
+    <style>
+      body {
+        background-color: black;
 			display: flex;
 			flex-direction: row;
 			justify-content: center;
@@ -12,64 +12,42 @@
 			height: 100vh;
 			margin: 0;
 			padding: 0;
-		}
-		
-		.square {
-			width: 150px;
-			height: 150px;
-			margin: 0 50px;
-			transition: background-color 1s;
-		}
-		
-		.morning {
-			background-color: #FFC300; /* yellow */
-		}
-		
-		.afternoon {
-			background-color: #FF5733; /* orange */
-		}
-		
-		.evening {
-			background-color: #C70039; /* red */
-		}
-		
-		.night {
-			background-color: #900C3F; /* dark red */
-		}
-	</style>
-</head>
-<body>
-	<div class="square morning"></div>
-	<div class="square afternoon"></div>
-	<div class="square evening"></div>
-	<div class="square night"></div>
-	
-	<script>
-		// Set color of squares based on time of day
-		var date = new Date();
-		var hour = date.getHours();
-		
-		if (hour >= 6 && hour < 12) {
-			document.querySelectorAll('.square')[0].classList.add('morning');
-			document.querySelectorAll('.square')[1].classList.add('morning');
-			document.querySelectorAll('.square')[2].classList.add('morning');
-			document.querySelectorAll('.square')[3].classList.add('morning');
-		} else if (hour >= 12 && hour < 18) {
-			document.querySelectorAll('.square')[0].classList.add('afternoon');
-			document.querySelectorAll('.square')[1].classList.add('afternoon');
-			document.querySelectorAll('.square')[2].classList.add('afternoon');
-			document.querySelectorAll('.square')[3].classList.add('afternoon');
-		} else if (hour >= 18 && hour < 24) {
-			document.querySelectorAll('.square')[0].classList.add('evening');
-			document.querySelectorAll('.square')[1].classList.add('evening');
-			document.querySelectorAll('.square')[2].classList.add('evening');
-			document.querySelectorAll('.square')[3].classList.add('evening');
-		} else {
-			document.querySelectorAll('.square')[0].classList.add('night');
-			document.querySelectorAll('.square')[1].classList.add('night');
-			document.querySelectorAll('.square')[2].classList.add('night');
-			document.querySelectorAll('.square')[3].classList.add('night');
-		}
-	</script>
-</body>
+          }
+      .square {
+        width: 150px;
+        height: 150px;
+        margin: 0 50px;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="square" id="hour1"></div>
+    <div class="square" id="hour2"></div>
+    <div class="square" id="minute1"></div>
+    <div class="square" id="minute2"></div>
+
+    <script>
+      function updateColors() {
+        var date = new Date();
+        var hour1 = Math.floor(date.getHours() / 10);
+        var hour2 = date.getHours() % 10;
+        var minute1 = Math.floor(date.getMinutes() / 10);
+        var minute2 = date.getMinutes() % 10;
+
+        document.getElementById("hour1").style.backgroundColor = getColor(hour1);
+        document.getElementById("hour2").style.backgroundColor = getColor(hour2);
+        document.getElementById("minute1").style.backgroundColor = getColor(minute1);
+        document.getElementById("minute2").style.backgroundColor = getColor(minute2);
+      }
+
+      function getColor(number) {
+        var colors = ["#B2ACA3", "#2B2620", "#847C70", "#847C70", "#60584E", "#847C70", "#B2ACA3", "#443C31", "#F4F4F4", "#B2ACA3"];
+        // 6, 2, 5, 5, 4, 5, 6, 3, 7, 6
+        return colors[number];
+      }
+
+      setInterval(updateColors, 1000); // Update colors every second
+    </script>
+  </body>
 </html>
