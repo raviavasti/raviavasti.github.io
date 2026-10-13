@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "activePalette": "blue",
+  "activePalette": "grayscale",
   "palettes": {
     "grayscale": [
       "#bbb6b6",
