@@ -49,48 +49,83 @@
     </div>
 
     <script>
-      function getColor(number) {
-        const colors = [
-          "#bbb6b6",
-          "#232122",
-          "#888383",
-          "#888383",
-          "#565052",
-          "#888383",
-          "#bbb6b6",
-          "#3a3637",
-          "#ede8e6",
-          "#bbb6b6"
-        ];
+  const DEFAULT_COLORS = [
+    "#bbb6b6",
+    "#232122",
+    "#888383",
+    "#888383",
+    "#565052",
+    "#888383",
+    "#bbb6b6",
+    "#3a3637",
+    "#ede8e6",
+    "#bbb6b6"
+  ];
 
-        return colors[number];
-      }
+  let colors = [...DEFAULT_COLORS];
 
-      function updateColors() {
-        const date = new Date();
+  function isValidPalette(palette) {
+    return (
+      Array.isArray(palette.colors) &&
+      palette.colors.length === 10 &&
+      palette.colors.every(
+        (color) =>
+          typeof color === "string" &&
+          /^#[0-9a-f]{6}$/i.test(color)
+      )
+    );
+  }
 
-        const hour1 = Math.floor(date.getHours() / 10);
-        const hour2 = date.getHours() % 10;
-        const minute1 = Math.floor(date.getMinutes() / 10);
-        const minute2 = date.getMinutes() % 10;
+  async function loadPalette() {
+    try {
+      const response = await fetch(`palette.json?v=${Date.now()}`, {
+        cache: "no-store"
+      });
 
-        document.getElementById("hour1").style.backgroundColor = getColor(hour1);
-        document.getElementById("hour2").style.backgroundColor = getColor(hour2);
-        document.getElementById("minute1").style.backgroundColor = getColor(minute1);
-        document.getElementById("minute2").style.backgroundColor = getColor(minute2);
-      }
+      if (!response.ok) return;
 
-      function scheduleUpdate() {
+      const palette = await response.json();
+
+      if (isValidPalette(palette)) {
+        colors = palette.colors;
         updateColors();
-
-        const now = new Date();
-        const millisecondsUntilNextMinute =
-          60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
-
-        setTimeout(scheduleUpdate, millisecondsUntilNextMinute);
       }
+    } catch {
+      /* If offline or unavailable, retain the built-in grayscale palette. */
+    }
+  }
 
-      scheduleUpdate();
-    </script>
+  function getColor(number) {
+    return colors[number];
+  }
+
+  function updateColors() {
+    const date = new Date();
+
+    const hour1 = Math.floor(date.getHours() / 10);
+    const hour2 = date.getHours() % 10;
+    const minute1 = Math.floor(date.getMinutes() / 10);
+    const minute2 = date.getMinutes() % 10;
+
+    document.getElementById("hour1").style.backgroundColor = getColor(hour1);
+    document.getElementById("hour2").style.backgroundColor = getColor(hour2);
+    document.getElementById("minute1").style.backgroundColor = getColor(minute1);
+    document.getElementById("minute2").style.backgroundColor = getColor(minute2);
+  }
+
+  function scheduleUpdate() {
+    updateColors();
+
+    const now = new Date();
+    const millisecondsUntilNextMinute =
+      60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
+
+    setTimeout(scheduleUpdate, millisecondsUntilNextMinute);
+  }
+
+  scheduleUpdate();
+  loadPalette();
+</script>
+
   </body>
 </html>
